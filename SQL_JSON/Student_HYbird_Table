@@ -1,0 +1,5 @@
+CREATE TABLE student(
+    Roll_no  NUMBER PRIMARY KEY ,
+    NAME VARCHAR2(50),
+    Semester NUMBER,
+    profile_data JSON);
