@@ -1,0 +1,437 @@
+# Oracle Database Architecture Overview
+## 1. What is Oracle Database Architecture?
+Oracle Database Architecture explains **how an Oracle database stores data and how it processes user requests**.
+In simple words, it tells us:
+* Where data is stored
+* How Oracle uses memory
+* How Oracle processes requests
+* How database files work together
+* How users access the database
+Oracle Database has two main parts:
+1. **Instance**
+2. **Database**
+```
+Oracle Database System
+        |
+   ┌────┴────┐
+   ↓         ↓
+Instance   Database
+```
+# 2. Oracle Instance
+An **Oracle Instance** is the combination of:
+* Memory
+* Background processes
+```
+Instance
+   |
+   ├── Memory
+   |    ├── SGA
+   |    └── PGA
+   |
+   └── Background Processes
+        ├── DBWn
+        ├── LGWR
+        ├── CKPT
+        ├── SMON
+        └── PMON
+```
+
+The instance helps Oracle **access and manage the database**.
+### Simple Example
+Think of a library:
+* **Database = Books and records**
+* **Instance = Staff and working area**
+The books contain the information, while the staff and working area help people find and manage the books.
+# 3. Oracle Database
+The **Oracle Database** is the collection of physical files that store database information.
+Important database files are:
+### 1. Datafiles
+Datafiles store the actual database data.
+For example, tables such as:
+* Students
+* Employees
+* Patients
+* Courses
+are stored in datafiles.
+```
+Tables
+   ↓
+Data
+   ↓
+Datafiles
+```
+### 2. Control Files
+Control files store important information about the structure of the database.
+They help Oracle keep track of important database information and files.
+Simple meaning:
+> **Control files help Oracle understand the structure of the database.**
+
+---
+
+### 3. Online Redo Log Files
+
+Redo log files contain information about changes made to the database.
+
+For example:
+
+```sql
+UPDATE accounts
+SET balance = balance - 5000
+WHERE account_id = 101;
+```
+
+The change generates redo information.
+
+Redo logs are very important for **database recovery**.
+
+Simple meaning:
+
+> **Redo logs help Oracle recover changes after a failure.**
+
+---
+
+# 4. Instance vs Database
+
+This is one of the most important concepts in Oracle.
+
+### Instance
+
+An instance contains:
+
+* Memory
+* Background processes
+
+### Database
+
+A database contains:
+
+* Datafiles
+* Control files
+* Online redo log files
+
+### Easy Difference
+
+| Instance                 | Database                                     |
+| ------------------------ | -------------------------------------------- |
+| Memory + processes       | Physical files                               |
+| Helps access/manage data | Stores database information                  |
+| Includes SGA and PGA     | Includes datafiles, control files, redo logs |
+| Works with the database  | Contains the stored data                     |
+
+### Remember:
+
+> **Instance manages/accesses the database, while the database stores the data.**
+
+---
+
+# 5. SGA
+
+**SGA = System Global Area**
+
+SGA is a **shared memory area** of the Oracle instance.
+
+It is called shared because different Oracle processes can use its memory.
+
+Important SGA areas include:
+
+* Database Buffer Cache
+* Shared Pool
+* Redo Log Buffer
+
+```text
+SGA
+ |
+ ├── Database Buffer Cache
+ ├── Shared Pool
+ └── Redo Log Buffer
+```
+
+---
+
+## Database Buffer Cache
+
+The Database Buffer Cache stores database blocks temporarily in memory.
+
+It helps Oracle access frequently used data more efficiently.
+
+Simple idea:
+
+```text
+Datafile → Buffer Cache → User
+```
+
+---
+
+## Shared Pool
+
+The Shared Pool stores information used while processing SQL and other database operations.
+
+It includes important areas such as:
+
+* Library Cache
+* Data Dictionary Cache
+
+---
+
+## Redo Log Buffer
+
+The Redo Log Buffer temporarily holds redo information before it is written to the online redo log files.
+
+---
+
+# 6. PGA
+
+**PGA = Program Global Area**
+
+PGA is a **private memory area** associated with an Oracle server process.
+
+The easiest way to remember:
+
+```text
+SGA → Shared Memory
+PGA → Private Memory
+```
+
+So:
+
+> **SGA is shared, while PGA is private to a process.**
+
+---
+
+# 7. Background Processes
+
+Oracle uses background processes to perform important database tasks.
+
+Some important processes are:
+
+## DBWn — Database Writer
+
+DBWn writes modified database blocks from memory to datafiles.
+
+```text
+Buffer Cache
+     ↓
+    DBWn
+     ↓
+Datafiles
+```
+
+Simple meaning:
+
+> **DBWn writes changed data blocks to datafiles.**
+
+---
+
+## LGWR — Log Writer
+
+LGWR writes redo information from the Redo Log Buffer to the online redo log files.
+
+```text
+Redo Log Buffer
+       ↓
+      LGWR
+       ↓
+Online Redo Logs
+```
+
+Simple meaning:
+
+> **LGWR writes redo information to redo log files.**
+
+---
+
+## CKPT — Checkpoint Process
+
+CKPT is involved in checkpoint operations.
+
+It helps Oracle maintain information needed for database recovery and consistency.
+
+Simple meaning:
+
+> **CKPT helps manage checkpoints.**
+
+---
+
+## SMON — System Monitor
+
+SMON performs system-level recovery and cleanup tasks.
+
+It is especially important when Oracle needs to perform **instance recovery**.
+
+Simple meaning:
+
+> **SMON helps recover and clean up the system.**
+
+---
+
+## PMON — Process Monitor
+
+PMON monitors server processes and performs cleanup when a process fails.
+
+Simple meaning:
+
+> **PMON helps clean up after failed processes.**
+
+---
+
+# 8. Logical Storage Structure
+
+Oracle also organizes storage logically.
+
+The basic hierarchy is:
+
+```text
+Tablespace
+    ↓
+Segment
+    ↓
+Extent
+    ↓
+Data Block
+```
+
+## Tablespace
+
+A tablespace is a **logical storage container** in an Oracle database.
+
+## Segment
+
+A segment is the storage used by a database object, such as a table or index.
+
+## Extent
+
+An extent is a group of data blocks allocated to a segment.
+
+## Data Block
+
+A data block is the basic unit of Oracle database storage.
+
+### Easy hierarchy
+
+> **Tablespace → Segment → Extent → Data Block**
+
+---
+
+# 9. How a User Request Works
+
+Suppose a user runs:
+
+```sql
+SELECT * FROM students;
+```
+
+The basic flow is:
+
+```text
+User
+  ↓
+SQL Query
+  ↓
+Oracle Instance
+  ↓
+Memory + Processes
+  ↓
+Database
+  ↓
+Datafiles
+  ↓
+Student Data
+  ↓
+Result
+```
+
+The user does **not directly access the physical datafiles**.
+
+Oracle handles the request through its instance and database architecture.
+
+---
+
+# 10. Complete Oracle Architecture
+
+The complete high-level picture is:
+
+```text
+                     USER
+                      |
+                      ↓
+                 SQL / PL/SQL
+                      |
+                      ↓
+              Oracle Instance
+             ┌────────┴────────┐
+             ↓                 ↓
+           Memory           Processes
+             |                 |
+        ┌────┴────┐       ┌────┴─────┐
+        ↓         ↓       ↓          ↓
+       SGA       PGA     DBWn       LGWR
+                         SMON       PMON
+                         CKPT        ...
+             |                 |
+             └────────┬────────┘
+                      ↓
+               Oracle Database
+                      |
+          ┌───────────┼───────────┐
+          ↓           ↓           ↓
+      Datafiles   Control Files  Redo Logs
+```
+
+---
+
+# 11. Important Terms at a Glance
+
+| Term         | Easy Meaning                                    |
+| ------------ | ----------------------------------------------- |
+| Instance     | Memory + background processes                   |
+| Database     | Physical files that store database information  |
+| SGA          | Shared memory                                   |
+| PGA          | Private memory                                  |
+| Datafile     | Stores database data                            |
+| Control File | Stores important database structure information |
+| Redo Log     | Stores redo information for recovery            |
+| DBWn         | Writes modified blocks to datafiles             |
+| LGWR         | Writes redo to redo logs                        |
+| CKPT         | Manages checkpoint operations                   |
+| SMON         | Performs system recovery and cleanup            |
+| PMON         | Cleans up after failed processes                |
+| Tablespace   | Logical storage container                       |
+| Segment      | Storage used by a database object               |
+| Extent       | Group of data blocks                            |
+| Data Block   | Basic storage unit                              |
+
+---
+
+# 12. Quick Revision
+
+Remember these points:
+
+### Oracle Architecture has two major parts:
+
+**Instance + Database**
+
+### Instance contains:
+
+**Memory + Background Processes**
+
+### Important memory areas:
+
+**SGA + PGA**
+
+### Important database files:
+
+**Datafiles + Control Files + Online Redo Logs**
+
+### Important processes:
+
+**DBWn + LGWR + CKPT + SMON + PMON**
+
+### Logical storage hierarchy:
+
+**Tablespace → Segment → Extent → Data Block**
+
+---
+
+## One-Line Summary
+
+> **Oracle Instance provides the memory and processes needed to access and manage the Oracle Database, while the Database contains the physical files that store the data and other database information.**
