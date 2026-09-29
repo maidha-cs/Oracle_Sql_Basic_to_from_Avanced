@@ -65,11 +65,7 @@ Control files store important information about the structure of the database.
 They help Oracle keep track of important database information and files.
 Simple meaning:
 > **Control files help Oracle understand the structure of the database.**
-
----
-
-### 3. Online Redo Log Files
-
+### 3. Online Redo Log Filess
 Redo log files contain information about changes made to the database.
 
 For example:
