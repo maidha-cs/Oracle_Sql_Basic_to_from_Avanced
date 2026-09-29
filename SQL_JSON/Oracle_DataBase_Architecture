@@ -87,16 +87,11 @@ Simple meaning:
 ---
 
 # 4. Instance vs Database
-
 This is one of the most important concepts in Oracle.
-
 ### Instance
-
 An instance contains:
-
 * Memory
 * Background processes
-
 ### Database
 
 A database contains:
