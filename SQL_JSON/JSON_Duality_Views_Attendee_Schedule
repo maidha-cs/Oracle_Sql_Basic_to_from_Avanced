@@ -1,0 +1,17 @@
+CREATE JSON DUALITY VIEW schedule_view AS
+attendee
+{
+    ID      : aid,
+    name    : name,
+    company : company,
+    schedule : attendee_sessions
+    [ {
+        session @unnest
+        {
+            code    : sid,
+            session : sname,
+            time    : time,
+            room    : room
+        }
+    } ]
+};
