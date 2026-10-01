@@ -1,0 +1,438 @@
+# RAG — Retrieval-Augmented Generation
+
+## 1. What is RAG?
+
+**RAG = Retrieval-Augmented Generation**
+
+RAG is an AI architecture that combines:
+
+* Information retrieval
+* Vector search
+* Large Language Models (LLMs)
+
+The main idea is:
+
+> **Retrieve relevant information first, then give that information to the LLM so it can generate a more relevant answer.**
+
+---
+
+# 2. Why is RAG Needed?
+
+An LLM may not automatically know:
+
+* Your private documents
+* Your company's internal information
+* Your latest database records
+* Your personal notes
+* Your organization's policies
+
+RAG allows an AI application to retrieve relevant information from an external knowledge source and provide it to the LLM as context.
+
+---
+
+# 3. Basic RAG Flow
+
+```text
+User Question
+      ↓
+Question Embedding
+      ↓
+Vector Search
+      ↓
+Retrieve Relevant Information
+      ↓
+Relevant Context
+      ↓
+LLM
+      ↓
+Generated Answer
+      ↓
+User
+```
+
+---
+
+# 4. Complete Data Preparation Flow
+
+Before the user asks a question, information is usually prepared.
+
+```text
+Documents / Data
+      ↓
+    Chunking
+      ↓
+   Embedding
+      ↓
+  Vector Database
+```
+
+Then, when the user asks a question:
+
+```text
+User Question
+      ↓
+    Embedding
+      ↓
+  Vector Search
+      ↓
+Relevant Chunks
+      ↓
+      LLM
+      ↓
+     Answer
+```
+
+---
+
+# 5. Step 1 — Data
+
+The source information can come from:
+
+* PDF documents
+* Text files
+* Websites
+* Company documents
+* Database records
+* Manuals
+* Reports
+* Personal knowledge bases
+
+This information becomes the knowledge source for the RAG system.
+
+---
+
+# 6. Step 2 — Chunking
+
+Large documents are divided into smaller meaningful pieces called **chunks**.
+
+Example:
+
+```text
+Large PDF
+   ↓
+Chunk 1
+Chunk 2
+Chunk 3
+Chunk 4
+...
+```
+
+### Why chunking?
+
+A very large document is difficult to search and pass completely to an LLM.
+
+Smaller meaningful chunks make retrieval more targeted.
+
+---
+
+# 7. Step 3 — Embedding
+
+Each chunk is converted into a numerical representation called an **embedding**.
+
+Conceptually:
+
+```text
+Text
+ ↓
+Embedding Model
+ ↓
+Vector
+```
+
+Example:
+
+```text
+"Oracle database stores data"
+            ↓
+[0.12, -0.45, 0.78, ...]
+```
+
+The actual vector usually contains many dimensions.
+
+The vector represents semantic information about the text.
+
+---
+
+# 8. Step 4 — Vector Database
+
+The generated embeddings are stored in a system that supports vector search.
+
+Conceptually:
+
+```text
+Chunk 1 → Vector 1
+Chunk 2 → Vector 2
+Chunk 3 → Vector 3
+```
+
+The vector representation allows the system to search for information based on **semantic similarity**.
+
+Oracle AI Database can store and search vector data.
+
+---
+
+# 9. Step 5 — User Question
+
+The user asks a question.
+
+Example:
+
+> "What is Oracle RAC?"
+
+The question can also be converted into an embedding.
+
+```text
+User Question
+      ↓
+Embedding Model
+      ↓
+Question Vector
+```
+
+---
+
+# 10. Step 6 — Similarity Search
+
+The question vector is compared with stored vectors.
+
+The system searches for chunks that are **semantically similar or relevant** to the question.
+
+For example:
+
+```text
+Question
+   ↓
+Vector Search
+   ↓
+Chunk 2
+Chunk 7
+Chunk 12
+```
+
+These retrieved chunks become relevant context.
+
+---
+
+# 11. Step 7 — LLM
+
+The retrieved information is provided to the **Large Language Model (LLM)** along with the user's question.
+
+Conceptually:
+
+```text
+User Question
+      +
+Retrieved Context
+      ↓
+     LLM
+      ↓
+Generated Answer
+```
+
+The LLM uses the supplied context to generate the response.
+
+---
+
+# 12. Step 8 — Final Answer
+
+The generated answer is returned to the user.
+
+Complete flow:
+
+```text
+Data
+ ↓
+Chunking
+ ↓
+Embedding
+ ↓
+Vector Database
+ ↓
+User Question
+ ↓
+Question Embedding
+ ↓
+Similarity Search
+ ↓
+Relevant Chunks
+ ↓
+LLM
+ ↓
+Answer
+```
+
+---
+
+# 13. RAG vs Normal LLM
+
+## Normal LLM
+
+```text
+User
+ ↓
+LLM
+ ↓
+Answer
+```
+
+The model generates an answer based on its training and the information provided in the current context.
+
+## RAG
+
+```text
+User
+ ↓
+Retrieve Relevant Information
+ ↓
+LLM
+ ↓
+Answer
+```
+
+RAG adds an external retrieval step before generation.
+
+---
+
+# 14. Benefits of RAG
+
+RAG can help:
+
+* Use private or organization-specific information
+* Use external knowledge sources
+* Retrieve relevant information from large document collections
+* Keep information sources separate from the LLM's training
+* Provide context to the LLM
+* Reduce the need to put an entire document collection directly into the prompt
+
+---
+
+# 15. Important RAG Terms
+
+### Retrieval
+
+Finding relevant information from a knowledge source.
+
+### Augmented
+
+Adding retrieved information to the LLM's context.
+
+### Generation
+
+The LLM generates the final response.
+
+### Chunk
+
+A smaller piece of a larger document.
+
+### Embedding
+
+A numerical/vector representation of data.
+
+### Vector Search
+
+Searching for semantically similar vectors.
+
+### Context
+
+Information supplied to the LLM to help generate an answer.
+
+---
+
+# 16. RAG and Oracle AI Database
+
+Oracle AI Database can be part of a RAG architecture.
+
+Conceptually:
+
+```text
+Documents
+    ↓
+Chunking
+    ↓
+Embeddings
+    ↓
+Oracle AI Database
+    ↓
+Vector Search
+    ↓
+Relevant Context
+    ↓
+LLM
+    ↓
+Answer
+```
+
+The database can store application data and vector representations, while vector search can help retrieve relevant information for the AI application.
+
+---
+
+# 17. RAG Memory Trick
+
+Remember:
+
+### **R → Retrieve**
+
+Find relevant information.
+
+### **A → Augment**
+
+Add that information to the LLM context.
+
+### **G → Generate**
+
+LLM generates the answer.
+
+Therefore:
+
+> **RAG = Retrieve → Augment → Generate**
+
+---
+
+# 18. Exam Definition
+
+> **Retrieval-Augmented Generation (RAG) is an AI architecture that retrieves relevant information from an external knowledge source and provides it as context to a Large Language Model to generate a response.**
+
+---
+
+# 19. One-Line Summary
+
+> **RAG allows an LLM to use relevant external information before generating an answer.**
+
+---
+
+# 20. Complete Memory Diagram
+
+```text
+                KNOWLEDGE PREPARATION
+                        
+Documents / Data
+       ↓
+   Chunking
+       ↓
+   Embedding
+       ↓
+ Vector Database
+       │
+       │
+       ▼
+       ───────────────
+       │
+       ▼
+       USER QUESTION
+       ↓
+    Embedding
+       ↓
+  Similarity Search
+       ↓
+ Relevant Chunks
+       ↓
+      LLM
+       ↓
+ Generated Answer
+       ↓
+      USER
+```
+
+### Final Memory Line
+
+**Data → Chunk → Embedding → Vector DB → Retrieve → Context → LLM → Answer**
