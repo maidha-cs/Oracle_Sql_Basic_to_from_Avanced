@@ -67,7 +67,6 @@ Simple meaning:
 > **Control files help Oracle understand the structure of the database.**
 ### 3. Online Redo Log Filess
 Redo log files contain information about changes made to the database.
-
 For example:
 
 ```sql

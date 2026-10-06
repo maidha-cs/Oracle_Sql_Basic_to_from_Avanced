@@ -12,7 +12,7 @@ Example:
 
 Vectors can represent data such as text, images, audio, and other information in numerical form.
 
----
+
 
 ## 2. Generate Vector / Embedding
 
