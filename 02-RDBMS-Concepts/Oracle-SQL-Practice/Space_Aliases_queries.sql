@@ -1,0 +1,29 @@
+
+-- Task 1: Display Full Name
+SELECT FIRST_NAME || ' ' || LAST_NAME AS FULL_NAME
+FROM HR.EMPLOYEES;
+
+
+-- Task 2: Display Monthly Salary
+SELECT FIRST_NAME, SALARY AS MONTHLY_SALARY
+FROM HR.EMPLOYEES;
+
+
+-- Task 3: Display Employee Name and Email
+SELECT FIRST_NAME || ' ' || LAST_NAME AS EMPLOYEE_NAME,
+       EMAIL
+FROM HR.EMPLOYEES;
+
+
+-- Task 4: Calculate Annual Salary
+SELECT FIRST_NAME,
+       SALARY,
+       SALARY * 12 AS ANNUAL_SALARY
+FROM HR.EMPLOYEES;
+
+
+-- Task 5: Calculate Salary After 10% Increase
+SELECT FIRST_NAME,
+       SALARY,
+       SALARY * 1.10 AS INCREASED_SALARY
+FROM HR.EMPLOYEES;
